@@ -1,20 +1,52 @@
 from django.contrib import admin
-from .models import Category, Trip
+from django.utils.html import format_html
+from .models import Category, Trip, TripEvent, Booking
+from .forms import TripEventForm
 
-# Register models
+# -------------------------
+# TripEvent Admin
+# -------------------------
+@admin.register(TripEvent)
+class TripEventAdmin(admin.ModelAdmin):
+    form = TripEventForm
+    list_display = ('trip', 'date', 'time', 'status', 'available_places_display')
+    list_filter = ('status', 'date', 'trip')
+    search_fields = ('trip__title',)
 
-"""
-Here we register the models to display them on the admin site
-"""
+    # Custom display for available places with color warnings
+    def available_places_display(self, obj):
+        remaining = obj.available_places
+        if remaining == 0:
+            return format_html('<span style="color:red;font-weight:bold;">Sold Out</span>')
+        elif remaining <= 5:
+            return format_html('<span style="color:orange;">{} left</span>', remaining)
+        else:
+            return f"{remaining} available"
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    available_places_display.short_description = 'Available Places'
 
-
+# -------------------------
+# Trip Admin
+# -------------------------
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
     list_display = ('title', 'place_name', 'category', 'distance_display', 'duration', 'level', 'price_display')
     list_filter = ('category', 'level')
     search_fields = ('title', 'place_name')
     prepopulated_fields = {"slug": ("title",)}
+
+# -------------------------
+# Category Admin
+# -------------------------
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+# -------------------------
+# Booking Admin
+# -------------------------
+@admin.register(Booking)
+class BookingAdmin(admin.ModelAdmin):
+    list_display = ('user', 'event', 'places', 'booked_at')
+    list_filter = ('event__status', 'booked_at')
+    search_fields = ('user__username', 'event__trip__title')
