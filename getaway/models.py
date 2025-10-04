@@ -37,16 +37,32 @@ class Trip(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
 
+
     class Meta:
         verbose_name = "Trip"
         verbose_name_plural = "Trips"
+
+
+    def price_display(self):
+        if self.price is not None:
+            return f"£{self.price:.2f}"
+        return "Free"
+
+    price_display.short_description = "Price"
+
+
+    def distance_display(self):
+        return f"{self.distance} km"
+
+
+    distance_display.short_description = "Distance"
 
     def __str__(self):
         return f"{self.title} ({self.place_name})"
 
 
 
-        # Auto-generate slug when saving
+    # Auto-generate slug when saving
 
     def save(self, *args, **kwargs):
         if not self.slug:

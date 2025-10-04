@@ -14,6 +14,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
-    list_display = ('title', 'place_name', 'category', 'distance', 'duration', 'level', 'price')
+    list_display = ('title', 'place_name', 'category', 'distance_display', 'duration', 'level', 'price_display')
     list_filter = ('category', 'level')
     search_fields = ('title', 'place_name')
+    prepopulated_fields = {"slug": ("title",)}
