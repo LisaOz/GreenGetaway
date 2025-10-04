@@ -1,0 +1,28 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.sqlite3
+
+# Virtual environments
+.venv/
+
+# Django stuff
+*.log
+*.pot
+*.mo
+*.coverage
+*.egg-info/
+*.eggs/
+
+
+
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
