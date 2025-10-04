@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 # Create your models here.
 
@@ -12,6 +13,11 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"  # Plural form for admin
+    def __str__(self):
+        return self.name
 
 class Trip(models.Model):
     LEVEL_CHOICES = [
@@ -22,6 +28,7 @@ class Trip(models.Model):
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='trips')
     title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=120, unique=True, blank=True) # slug
     place_name = models.CharField(max_length=100)
     distance = models.DecimalField(max_digits=6, decimal_places=2, help_text="Distance in km")
     duration= models.CharField(max_length=50, help_text="Duration of trip")
@@ -30,5 +37,18 @@ class Trip(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
 
+    class Meta:
+        verbose_name = "Trip"
+        verbose_name_plural = "Trips"
+
     def __str__(self):
         return f"{self.title} ({self.place_name})"
+
+
+
+        # Auto-generate slug when saving
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
