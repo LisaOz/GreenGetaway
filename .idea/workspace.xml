@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cfb8db7-bbcf-4437-b0f6-9cb43fbbc1a5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/getaway/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/getaway/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GreenGetaway/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/GreenGetaway/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GreenGetaway/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GreenGetaway/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getaway/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getaway/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getaway/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/getaway/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +19,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -38,6 +34,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "settings.editor.selected.configurable": "preferences.keymap"

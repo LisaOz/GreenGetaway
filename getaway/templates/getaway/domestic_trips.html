@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Green Getaway</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        .category {
+            display: inline-block;
+            padding: 40px;
+            margin: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: black;
+            background: #f0f0f0;
+        }
+        .category:hover {
+            background: #d0e6d0;
+            color: #006400;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Green Getaway</h1>
+    <p>Choose your adventure:</p>
+
+    {% for category in categories %}
+        <a class="category" href="#">
+            {{ category.name }}
+        </a>
+    {% endfor %}
+</body>
+</html>

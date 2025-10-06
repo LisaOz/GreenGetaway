@@ -9,11 +9,11 @@ from .models import Category, Trip
 """
 View for a homepage
 """
-def homepage(request):
-    categories = Category.objects.all()
-    trips = Trip.objects.all()
-    return render(request, 'getaway/homepage.html', {'categories': categories, 'trips': trips})
 
+
+def domestic_trips(request):
+    categories = Category.objects.all()
+    return render(request, 'getaway/domestic_trips.html', {'categories': categories})
 
 """
 View for a separate trip with description and other details
