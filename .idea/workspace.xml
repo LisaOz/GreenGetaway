@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cfb8db7-bbcf-4437-b0f6-9cb43fbbc1a5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/getaway/templates/getaway/home.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/static/getaway/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/getaway/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GreenGetaway/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/GreenGetaway/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/getaway/templates/getaway/domestic_trips.html" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/templates/getaway/domestic_trips.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/getaway/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

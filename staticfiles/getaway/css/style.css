@@ -1,0 +1,157 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+/* Layout */
+body {
+    background: #f9fafb;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: #2c7a7b;
+    color: #fff;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+header h1 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* ✨ Smooth fade-in for the entire page */
+body {
+    opacity: 0;
+    animation: fadeIn 1.2s ease-in forwards;
+    background-color: #fdfdfd; /* subtle neutral background behind hero */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+/* Main content */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Footer */
+footer {
+    margin-top: 2rem;
+    padding: 1rem 0;
+    background: #edf2f7;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+
+
+/* Hero section */
+/* Hero section */
+.hero {
+    height: 50vh;
+    background: url("../images/green_getaway_bg.jpg") center center/cover no-repeat;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 80, 0, 0.35); /* lighter green overlay */
+}
+
+.hero h1, .hero p {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+/* Categories container */
+.categories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 40px 20px;
+    background-color: #f5f8f5;
+}
+
+/* Category cards */
+.category {
+    position: relative;
+    width: 320px;
+    height: 200px;
+    border-radius: 15px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    text-decoration: none;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    transition: background 0.3s ease;
+}
+
+.category:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.category:hover::after {
+    background: rgba(0,0,0,0.1);
+}
+
+/* Category label */
+.category-label {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: bold;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}

@@ -12,7 +12,11 @@ View for a homepage
 
 
 def domestic_trips(request):
-    categories = Category.objects.all()
+    categories = [
+        {'name': 'City Strolls', 'image': 'getaway/images/city.jpg'},
+        {'name': 'Nature Retreats', 'image': 'getaway/images/nature.jpg'},
+        {'name': 'Abroad Travels', 'image': 'getaway/images/abroad.jpg'},
+    ]
     return render(request, 'getaway/domestic_trips.html', {'categories': categories})
 
 """
