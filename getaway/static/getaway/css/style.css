@@ -29,6 +29,37 @@ header h1 a {
     font-weight: bold;
 }
 
+h2 {
+    color: #1b5e20; /* rich dark green */
+    text-decoration: none;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif; /* modern luxury */
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeInUp 1.2s ease-out forwards;
+    transition: color 0.4s ease, text-shadow 0.4s ease, transform 0.4s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h2:hover {
+    color: #2e7d32;
+    text-shadow: 0 0 10px rgba(46, 125, 50, 0.4);
+    transform: translateY(-3px);
+}
+
 nav ul {
     list-style: none;
     display: flex;
@@ -49,7 +80,10 @@ nav a:hover {
 
 /* ===== Hero Section ===== */
 .hero {
-    height: 60vh;
+    height: 50vh;       /* default height */
+    min-height: 250px;  /* ensures it doesn’t collapse */
+    max-height: 60vh;   /* prevents it from being too tall */
+
     background: url("../images/green_getaway_bg.jpg") center center/cover no-repeat;
     position: relative;
     display: flex;
@@ -72,13 +106,58 @@ nav a:hover {
     text-align: center;
 }
 
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
+/* Hero title animation on page load. Keyframes for expanding and glowing*/
+
+
+/*  */
+@keyframes expandGlow {
+    0% {
+        transform: scale(1);
+        text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    50% {
+        transform: scale(1.2);
+        text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.6);
+    }
+    100% {
+        transform: scale(1);
+        text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
 }
 
-.hero p {
-    font-size: 1.5rem;
+/* Import a nice elegant font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400&display=swap');
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;  /* elegant, dark-green friendly */
+    font-size: 6rem;
+    color: #fff;  /* white color */
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    display: inline-block;
+    animation: expandGlow 4s ease-out forwards; /* slower expand */
+    transition: transform 0.5s ease, text-shadow 0.5s ease;
+}
+
+/* Page load expand & glow animation */
+@keyframes expandGlow {
+    0% {
+        transform: scale(1);
+        text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    50% {
+        transform: scale(1.3);  /* bigger expansion */
+        text-shadow: 0 0 30px rgba(255,255,255,0.9), 0 0 50px rgba(255,255,255,0.7);
+    }
+    100% {
+        transform: scale(1);
+        text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+}
+
+/* Hover effect (works anytime) */
+.hero h1:hover {
+    transform: scale(1.25);
+    text-shadow: 0 0 40px rgba(255,255,255,1), 0 0 60px rgba(255,255,255,0.8);
 }
 
 /* ===== Category Section ===== */
@@ -99,7 +178,7 @@ nav a:hover {
     border-radius: 15px;
     overflow: hidden;
     height: 0;
-    padding-top: 80%;         /* makes it square and smaller */
+    padding-top: 80%;         /* makes it square  */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
