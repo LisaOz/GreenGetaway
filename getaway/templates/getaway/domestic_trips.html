@@ -1,57 +1,47 @@
-{% extends "getaway/base.html" %}
+{% extends 'getaway/base.html' %}
 {% load static %}
 
-{% block title %}Domestic Trips | Green Getaway{% endblock %}
+{% block title %}Domestic Trips{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <div class="hero-text">
-        <h1>Welcome to Green Getaway</h1>
-        <p>Choose your next adventure</p>
+
+
+<section class="category-section">
+    <h2>Choose your adventure</h2> <!-- Intro text -->
+    <div class="container-fluid py-5">  <!-- fluid to stretch full width -->
+        <div class="row g-4 justify-content-center">
+
+            <!-- City Strolls -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <a href="#" class="text-decoration-none">
+                    <div class="category-card" style="background-image: url('{% static "getaway/images/city.jpg" %}');">
+                        <div class="overlay"></div>
+                        <h5 class="card-title">City Strolls</h5>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Nature Retreats -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <a href="#" class="text-decoration-none">
+                    <div class="category-card" style="background-image: url('{% static "getaway/images/nature.jpg" %}');">
+                        <div class="overlay"></div>
+                        <h5 class="card-title">Nature Retreats</h5>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Travel Abroad -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <a href="#" class="text-decoration-none">
+                    <div class="category-card" style="background-image: url('{% static "getaway/images/abroad.jpg" %}');">
+                        <div class="overlay"></div>
+                        <h5 class="card-title">Travel Abroad</h5>
+                    </div>
+                </a>
+            </div>
+
+        </div>
     </div>
 </section>
-
-<div class="container my-5">
-    <div class="row justify-content-center g-4">
-        <!-- City Strolls -->
-        <div class="col-md-4 col-sm-6">
-            <a href="#" class="text-decoration-none">
-                <div class="card category-card h-100 shadow-sm text-center"
-                     style="background-image: url('{% static "getaway/images/city.jpg" %}');">
-                    <div class="overlay"></div>
-                    <div class="card-body d-flex align-items-center justify-content-center">
-                        <h5 class="card-title text-white fw-bold">City Strolls</h5>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Nature Retreats -->
-        <div class="col-md-4 col-sm-6">
-            <a href="#" class="text-decoration-none">
-                <div class="card category-card h-100 shadow-sm text-center"
-                     style="background-image: url('{% static "getaway/images/nature.jpg" %}');">
-                    <div class="overlay"></div>
-                    <div class="card-body d-flex align-items-center justify-content-center">
-                        <h5 class="card-title text-white fw-bold">Nature Retreats</h5>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Abroad Travels -->
-        <div class="col-md-4 col-sm-6">
-            <a href="#" class="text-decoration-none">
-                <div class="card category-card h-100 shadow-sm text-center"
-                     style="background-image: url('{% static "getaway/images/abroad.jpg" %}');">
-
-                    <div class="overlay"></div>
-                    <div class="card-body d-flex align-items-center justify-content-center">
-                        <h5 class="card-title text-white fw-bold">Abroad Travels</h5>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
-</div>
 {% endblock %}
