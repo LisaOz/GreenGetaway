@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends 'getaway/base.html' %}
+
+{% block content %}
+<h1>{{ category.name }} Trips</h1>
+
+<div class="trips">
+    {% for trip in trips %}
+    <div class="trip-card">
+        <a href="{% url 'trip_detail' trip.slug %}"> <!-- optional trip detail page -->
+            <img src="{{ trip.main_image.url }}" alt="{{ trip.title }}">
+            <h2>{{ trip.title }}</h2>
+            <p>{{ trip.description|truncatewords:20 }}</p>
+            <p>{{ trip.price_display }}</p>
+        </a>
+    </div>
+    {% empty %}
+    <p>No trips available in this category yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

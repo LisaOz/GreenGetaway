@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50, unique=True)),
+                ('slug', models.SlugField(max_length=50, unique=True, blank=True)),  # slug
             ],
         ),
         migrations.CreateModel(
@@ -24,6 +25,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
+                ('slug', models.SlugField(max_length=120, unique=True, blank=True)),  # slug
                 ('place_name', models.CharField(max_length=100)),
                 ('distance', models.DecimalField(decimal_places=2, help_text='Distance in km', max_digits=6)),
                 ('duration', models.CharField(help_text='Duration of trip', max_length=50)),
