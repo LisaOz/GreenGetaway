@@ -1,21 +1,26 @@
-<!DOCTYPE html>
 {% extends 'getaway/base.html' %}
+{% load static %}
 
 {% block content %}
 <h1>{{ category.name }} Trips</h1>
 
-<div class="trips">
-    {% for trip in trips %}
-    <div class="trip-card">
-        <a href="{% url 'trip_detail' trip.slug %}"> <!-- optional trip detail page -->
-            <img src="{{ trip.main_image.url }}" alt="{{ trip.title }}">
-            <h2>{{ trip.title }}</h2>
-            <p>{{ trip.description|truncatewords:20 }}</p>
-            <p>{{ trip.price_display }}</p>
+<section class="category-section">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+      {% for trip in trips %}
+      <div class="col-lg-4 col-md-6 col-sm-12">
+        <a href="{% url 'trip_detail' trip.slug %}" class="trip-link">
+          <div class="category-card" style="background-image: url('{{ trip.main_image.url }}');">
+            <div class="overlay"></div>
+            <h5 class="card-title">{{ trip.title }}</h5>
+          </div>
         </a>
+      </div>
+      {% empty %}
+      <p>No trips available in this category yet.</p>
+      {% endfor %}
     </div>
-    {% empty %}
-    <p>No trips available in this category yet.</p>
-    {% endfor %}
-</div>
+  </div>
+</section>
 {% endblock %}
+

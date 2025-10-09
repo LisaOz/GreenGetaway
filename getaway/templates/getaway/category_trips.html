@@ -1,13 +1,26 @@
-<!DOCTYPE html>
 {% extends 'getaway/base.html' %}
-
-{% block title %}{{ category.name }} Trips{% endblock %}
+{% load static %}
 
 {% block content %}
-<h2>{{ category.name }}</h2>
-<ul>
-    {% for trip in trips %}
-    <li>{{ trip.title }} — {{ trip.place_name }}</li>
-    {% endfor %}
-</ul>
+<link rel="stylesheet" href="{% static 'getaway/css/style.css' %}">
+
+<section class="category-section">
+  <h2 class="category-heading">{{ category.name }} </h2>
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+      {% for trip in trips %}
+      <div class="col-lg-4 col-md-6 col-sm-12">
+        <a href="{% url 'getaway:trip_detail' trip.slug %}" class="trip-link">
+          <div class="category-card" style="background-image: url('{{ trip.main_image.url }}');">
+            <div class="overlay"></div>
+            <h3 class="card-title">{{ trip.title }}</h3>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <p>No trips available in this category yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 {% endblock %}

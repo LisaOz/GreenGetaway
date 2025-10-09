@@ -1,0 +1,28 @@
+{% extends 'getaway/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'getaway/css/style.css' %}">
+<section class="category-section">
+    <h2 class="category-heading">{{ category.name }} </h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+
+                {% if trip.main_image %}
+                <img src="{{ trip.main_image.url }}" class="card-img-top" alt="{{ trip.title }}">
+                {% else %}
+                <img src="https://via.placeholder.com/800x400" class="card-img-top" alt="{{ trip.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h2 class="trip-title text-center">{{ trip.title }}</h2>
+                    <p class="trip-description">{{ trip.description }}</p>
+                    <p><strong>Category:</strong> <a href="{% url 'getaway:category_trips' trip.category.slug %}">{{ trip.category.name }}</a></p>
+                    <p><strong>Price:</strong> £{{ trip.price }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

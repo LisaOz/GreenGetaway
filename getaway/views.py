@@ -43,3 +43,5 @@ def trip_detail(request, slug):
     events = trip.events.filter(status='upcoming')
     return render(request, 'getaway/trip_detail.html', {'trip': trip, 'events': events})
 
+
+
