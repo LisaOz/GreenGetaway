@@ -44,6 +44,22 @@ h2 {
     transition: color 0.4s ease, text-shadow 0.4s ease, transform 0.4s ease;
 }
 
+h3 {
+    color: #1b5e20; /* rich dark green */
+    text-decoration: none;
+
+    font-size: 2rem;
+    font-family: 'Montserrat', sans-serif; /* modern luxury */
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeInUp 1.2s ease-out forwards;
+    transition: color 0.4s ease, text-shadow 0.4s ease, transform 0.4s ease;
+}
+
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -162,7 +178,7 @@ nav a:hover {
 .category-section {
     background-color: #c8e6c9; /* light green */
     width: 100%;
-    padding: 60px 0;
+    padding: 10px 0;
 }
 
 .category-section .container {
@@ -176,7 +192,7 @@ nav a:hover {
     border-radius: 15px;
     overflow: hidden;
     height: 0;
-    padding-top: 80%;         /* makes it square  */
+    padding-top: 80%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
