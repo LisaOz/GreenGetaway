@@ -65,6 +65,11 @@ class Trip(models.Model):
         super().save(*args, **kwargs)
 
 
+
+class TripImage(models.Model):
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='extra_images')
+    image = models.ImageField(upload_to='trip_images/')
+
 # ---------- TRIP EVENT MODEL ----------
 class TripEvent(models.Model):
     STATUS_CHOICES = [

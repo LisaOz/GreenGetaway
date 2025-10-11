@@ -1,11 +1,28 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Trip, TripEvent, Booking
+from .models import Category, Trip, TripEvent, Booking, TripImage
 from .forms import TripEventForm
 
-# -------------------------
-# TripEvent Admin
-# -------------------------
+# ---------- Inline for extra images ----------
+class TripImageInline(admin.TabularInline):
+    model = TripImage
+    extra = 5  # number of blank slots to show
+
+# ---------- Trip Admin with inline ----------
+@admin.register(Trip)
+class TripAdmin(admin.ModelAdmin):
+    inlines = [TripImageInline]
+    list_display = ('title', 'place_name', 'category', 'distance_display', 'duration', 'level', 'price_display')
+    list_filter = ('category', 'level')
+    search_fields = ('title', 'place_name')
+    prepopulated_fields = {"slug": ("title",)}
+
+# ---------- Category Admin ----------
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+# ---------- TripEvent Admin ----------
 @admin.register(TripEvent)
 class TripEventAdmin(admin.ModelAdmin):
     form = TripEventForm
@@ -25,26 +42,7 @@ class TripEventAdmin(admin.ModelAdmin):
 
     available_places_display.short_description = 'Available Places'
 
-# -------------------------
-# Trip Admin
-# -------------------------
-@admin.register(Trip)
-class TripAdmin(admin.ModelAdmin):
-    list_display = ('title', 'place_name', 'category', 'distance_display', 'duration', 'level', 'price_display')
-    list_filter = ('category', 'level')
-    search_fields = ('title', 'place_name')
-    prepopulated_fields = {"slug": ("title",)}
-
-# -------------------------
-# Category Admin
-# -------------------------
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-
-# -------------------------
-# Booking Admin
-# -------------------------
+# ---------- Booking Admin ----------
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('user', 'event', 'places', 'booked_at')
