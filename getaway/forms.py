@@ -1,8 +1,13 @@
 # 🔹 Custom form for event display with date and time
-# getaway/forms.py
-from django import forms
-from .models import TripEvent
 
+from django.db import models
+from django import forms
+from .models import TripEvent, Booking
+
+
+"""
+Form for registering a trip event with date and time in the admin site
+"""
 class TripEventForm(forms.ModelForm):
     class Meta:
         model = TripEvent
@@ -27,3 +32,13 @@ class TripEventForm(forms.ModelForm):
                 f"Booked places ({booked_places}) cannot exceed maximum places ({max_places})."
             )
         return cleaned_data
+
+
+"""
+Form for booking a trip
+"""
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = Booking
+        fields = ['trip', 'name', 'email', 'num_people']
+

@@ -1,0 +1,12 @@
+{% extends 'getaway/base.html' %}
+{% block content %}
+<h2>Book your trip: {{ trip_event.trip.title }}</h2>
+<p>Remaining slots: {{ trip_event.available_places }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <a href="{% url 'getaway:booking_form' events.0.id %}" class="book-btn">Book this Trip</a>
+</form>
+{% endblock %}

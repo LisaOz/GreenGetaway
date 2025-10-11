@@ -1,0 +1,11 @@
+{% extends 'getaway/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="booking-message-container">
+    <h1>Booking Failed</h1>
+    <p>Sorry, we couldn’t process your booking for <strong>{{ trip_event.trip.title }}</strong>.</p>
+    <p>Please check the number of available slots and try again.</p>
+
+    <a href="{% url 'getaway:trip_detail' trip_event.trip.slug %}" class="btn">Back to Trip</a>
+</div>

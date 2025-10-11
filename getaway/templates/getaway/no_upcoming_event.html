@@ -1,0 +1,10 @@
+<!-- getaway/templates/getaway/no_upcoming_event.html -->
+{% extends 'getaway/base.html' %}
+
+{% block content %}
+<div class="trip-detail-container">
+    <h2>{{ trip.title }}</h2>
+    <p>Sorry, there are no upcoming events for this trip at the moment.</p>
+    <a href="javascript:history.back()" class="back-btn">← Back</a>
+</div>
+{% endblock %}

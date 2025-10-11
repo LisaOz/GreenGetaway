@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404
 from .models import Category, Trip
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import TripEvent
+from .forms import BookingForm
 
 
 # Create your views here.
@@ -40,8 +42,45 @@ View for a separate trip with description and other details
 
 def trip_detail(request, slug):
     trip = get_object_or_404(Trip, slug=slug)
-    events = trip.events.filter(status='upcoming')
-    return render(request, 'getaway/trip_detail.html', {'trip': trip, 'events': events})
+    first_event = trip.events.filter(status='upcoming').first()
+    return render(request, 'getaway/trip_detail.html', {
+        'trip': trip,
+        'first_event': first_event
+    })
+
+"""
+View for a booking form. Allows to book the first upcoming event
+"""
 
 
+def book_trip(request, trip_id):
+    trip_event = get_object_or_404(TripEvent, id=trip_id)
 
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.trip = trip_event
+
+            # Check if enough slots are available
+            if booking.num_people <= trip_event.available_places:
+                booking.save()
+                # Optionally update booked_places
+                trip_event.booked_places += booking.num_people
+                trip_event.save()
+                return render(request, 'getaway/booking_success.html', {
+                    'booking': booking,
+                    'trip_event': trip_event
+                })
+            else:
+                # Not enough places available
+                return render(request, 'getaway/booking_failed.html', {
+                    'trip_event': trip_event
+                })
+    else:
+        form = BookingForm()
+
+    return render(request, 'getaway/booking_form.html', {
+        'form': form,
+        'trip_event': trip_event
+    })

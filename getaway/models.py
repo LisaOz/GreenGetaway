@@ -103,24 +103,20 @@ class TripEvent(models.Model):
             self.status = 'passed' if event_datetime < now else 'upcoming'
         super().save(*args, **kwargs)
 
+"""
+Model for Booking a trip
+"""
+
 
 # ---------- BOOKING MODEL ----------
 class Booking(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookings')
-    event = models.ForeignKey(TripEvent, on_delete=models.CASCADE, related_name='bookings')
-    booked_at = models.DateTimeField(auto_now_add=True)
-    places = models.PositiveIntegerField(default=1)
+    trip = models.ForeignKey('TripEvent', on_delete=models.CASCADE, related_name='bookings')
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    num_people = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        if self.event.status in ['passed', 'cancelled']:
-            raise ValueError(f"Cannot book this trip. Current status is '{self.event.status}'.")
 
-        if self.places > self.event.available_places:
-            raise ValueError(f"Only {self.event.available_places} places are available for this trip.")
-
-        super().save(*args, **kwargs)
-        self.event.booked_places += self.places
-        self.event.save()
 
     def __str__(self):
-        return f"{self.user.username} booked {self.places} place(s) for {self.event}"
+        return f"Booking by {self.name} for {self.trip}"

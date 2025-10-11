@@ -2,30 +2,67 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'getaway/css/style.css' %}">
-<section class="category-section">
-     <div class="back-btn-container">
-  <a href="javascript:history.back()" class="back-btn">← Back</a>
-</div>
-    <h2 class="category-heading">{{ category.name }} </h2>
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
+<div class="trip-detail-container">
 
-                {% if trip.main_image %}
-                <img src="{{ trip.main_image.url }}" class="card-img-top" alt="{{ trip.title }}">
-                {% else %}
-                <img src="https://via.placeholder.com/800x400" class="card-img-top" alt="{{ trip.title }}">
-                {% endif %}
-                <div class="card-body">
-                    <h2 class="trip-title text-center">{{ trip.title }}</h2>
-                    <p class="trip-description">{{ trip.description }}</p>
-                    <p><strong>Category:</strong> <a href="{% url 'getaway:category_trips' trip.category.slug %}">{{ trip.category.name }}</a></p>
-                    <p><strong>Price:</strong> £{{ trip.price }}</p>
-                </div>
-            </div>
+    <!-- Title -->
+    <h1 class="trip-detail-title">{{ trip.title }}</h1>
+
+    <!-- Main Image -->
+    {% if trip.main_image %}
+        <img src="{{ trip.main_image.url }}" class="trip-main-image" alt="{{ trip.title }}">
+    {% endif %}
+
+    <!-- Description -->
+    <p class="trip-description-large">{{ trip.description }}</p>
+
+    <!-- Extra Images Gallery -->
+    {% if trip.extra_images.exists %}
+        <div class="trip-gallery">
+            {% for image in trip.extra_images.all %}
+                <img src="{{ image.image.url }}" class="trip-gallery-img" alt="Extra image of {{ trip.title }}" onclick="openLightbox(this)">
+            {% endfor %}
         </div>
+    {% endif %}
+
+    <!-- Trip info -->
+    <div class="trip-info">
+        <p><strong>Distance:</strong> {{ trip.distance_display }}</p>
+        <p><strong>Duration:</strong> {{ trip.duration }}</p>
+        <p><strong>Price:</strong> {{ trip.price_display }}</p>
+
+        {% if first_event %}
+            <p><strong>Remaining slots:</strong> {{ first_event.available_places }}</p>
+        {% else %}
+            <p><em>No upcoming events available</em></p>
+        {% endif %}
     </div>
+
+    <!-- Book button -->
+   {% if first_event %}
+    <a href="{% url 'getaway:book_trip' first_event.id %}" class="book-btn">Book this Trip</a>
+
+    {% else %}
+        <p><em>No upcoming events available for booking.</em></p>
+    {% endif %}
+
 </div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" style="display:none;" onclick="closeLightbox()">
+    <span class="close">&times;</span>
+    <img class="lightbox-img">
+</div>
+
+<script>
+function openLightbox(img) {
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = lightbox.querySelector('.lightbox-img');
+    lightbox.style.display = 'flex';
+    lightboxImg.src = img.src;
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+}
+</script>
 {% endblock %}
