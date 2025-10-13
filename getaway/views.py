@@ -2,6 +2,7 @@ from .models import Category, Trip
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import TripEvent
 from .forms import BookingForm
+from django.db.models import Min
 
 
 # Create your views here.
@@ -23,17 +24,24 @@ def home(request):
 
 
 """
-View for a category
+View for the list of trips by category. The trips are displayed with newest upcoming on the top
 """
+
 
 def category_trips(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    trips = category.trips.all()  # using related_name='trips'
+
+    # Get trips in this category, ordered by the soonest event date
+    trips = (
+        category.trips
+        .annotate(next_event_date=Min('events__date'))  # the earliest event date per trip
+        .order_by('next_event_date')  # soonest trips first
+    )
+
     return render(request, 'getaway/category_trips.html', {
         'category': category,
         'trips': trips
     })
-
 
 
 """

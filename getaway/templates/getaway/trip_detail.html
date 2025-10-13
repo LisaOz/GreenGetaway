@@ -2,67 +2,78 @@
 {% load static %}
 
 {% block content %}
-<div class="trip-detail-container">
+<section class="trip-section">
 
-    <!-- Title -->
-    <h1 class="trip-detail-title">{{ trip.title }}</h1>
+  <!-- Trip Title -->
+  <h2 class="trip-title">{{ trip.title }}</h2>
 
-    <!-- Main Image -->
-    {% if trip.main_image %}
-        <img src="{{ trip.main_image.url }}" class="trip-main-image" alt="{{ trip.title }}">
-    {% endif %}
+  <!-- ===== GRID LAYOUT ===== -->
+  <div class="trip-layout">
 
-    <!-- Description -->
-    <p class="trip-description-large">{{ trip.description }}</p>
+    <!-- ===== LEFT SIDE: CAROUSEL + BOOK BUTTON ===== -->
+    <div class="trip-left">
 
-    <!-- Extra Images Gallery -->
-    {% if trip.extra_images.exists %}
-        <div class="trip-gallery">
+      <!-- Large Carousel -->
+      <div class="trip-carousel">
+        <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+        <div class="carousel-track">
+          {% if trip.main_image %}
+            <img src="{{ trip.main_image.url }}" class="carousel-img" alt="{{ trip.title }}">
+          {% endif %}
+          {% if trip.extra_images.exists %}
             {% for image in trip.extra_images.all %}
-                <img src="{{ image.image.url }}" class="trip-gallery-img" alt="Extra image of {{ trip.title }}" onclick="openLightbox(this)">
+              <img src="{{ image.image.url }}" class="carousel-img" alt="{{ trip.title }} extra image">
             {% endfor %}
+          {% endif %}
         </div>
-    {% endif %}
+        <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
+      </div>
 
-    <!-- Trip info -->
-    <div class="trip-info">
+      <!-- Book Button -->
+      {% if first_event %}
+        <a href="{% url 'getaway:book_trip' first_event.id %}" class="book-btn">Book this Trip</a>
+      {% endif %}
+    </div>
+
+    <!-- ===== RIGHT SIDE: DESCRIPTION + DETAILS ===== -->
+    <div class="trip-right">
+      <!-- Description -->
+      <div class="trip-description">
+        <p>{{ trip.description }}</p>
+      </div>
+
+      <!-- Trip Info -->
+      <div class="trip-info">
         <p><strong>Distance:</strong> {{ trip.distance_display }}</p>
         <p><strong>Duration:</strong> {{ trip.duration }}</p>
         <p><strong>Price:</strong> {{ trip.price_display }}</p>
 
         {% if first_event %}
-            <p><strong>Remaining slots:</strong> {{ first_event.available_places }}</p>
+          <p><strong>Remaining slots:</strong> {{ first_event.available_places }}</p>
         {% else %}
-            <p><em>No upcoming events available</em></p>
+          <p><em>No upcoming events available for booking.</em></p>
         {% endif %}
+      </div>
     </div>
 
-    <!-- Book button -->
-   {% if first_event %}
-    <a href="{% url 'getaway:book_trip' first_event.id %}" class="book-btn">Book this Trip</a>
+  </div> <!-- /trip-layout -->
 
-    {% else %}
-        <p><em>No upcoming events available for booking.</em></p>
-    {% endif %}
+  <!-- Back Button -->
+  <div class="back-btn-container">
+    <a href="{% url 'getaway:home' %}" class="back-btn">← Back</a>
+  </div>
 
-</div>
+</section>
 
-<!-- Lightbox -->
-<div id="lightbox" class="lightbox" style="display:none;" onclick="closeLightbox()">
-    <span class="close">&times;</span>
-    <img class="lightbox-img">
-</div>
-
+<!-- ===== Carousel Script ===== -->
 <script>
-function openLightbox(img) {
-    var lightbox = document.getElementById('lightbox');
-    var lightboxImg = lightbox.querySelector('.lightbox-img');
-    lightbox.style.display = 'flex';
-    lightboxImg.src = img.src;
-}
-
-function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
+let currentSlide = 0;
+function moveSlide(direction) {
+  const track = document.querySelector('.carousel-track');
+  const slides = document.querySelectorAll('.carousel-img');
+  if (slides.length === 0) return;
+  currentSlide = (currentSlide + direction + slides.length) % slides.length;
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
 }
 </script>
 {% endblock %}
