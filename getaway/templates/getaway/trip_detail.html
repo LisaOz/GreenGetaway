@@ -7,13 +7,12 @@
   <!-- Trip Title -->
   <h2 class="trip-title">{{ trip.title }}</h2>
 
-  <!-- ===== GRID LAYOUT ===== -->
   <div class="trip-layout">
 
     <!-- ===== LEFT SIDE: CAROUSEL + BOOK BUTTON ===== -->
     <div class="trip-left">
 
-      <!-- Large Carousel -->
+      <!-- ===== LARGE CAROUSEL ===== -->
       <div class="trip-carousel">
         <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
         <div class="carousel-track">
@@ -29,7 +28,19 @@
         <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
       </div>
 
-      <!-- Book Button -->
+      <!-- ===== THUMBNAIL STRIP ===== -->
+      <div class="thumbnail-strip">
+        {% if trip.main_image %}
+          <img src="{{ trip.main_image.url }}" class="thumb-img active-thumb" alt="{{ trip.title }}" onclick="goToSlide(0)">
+        {% endif %}
+        {% if trip.extra_images.exists %}
+          {% for image in trip.extra_images.all %}
+            <img src="{{ image.image.url }}" class="thumb-img" alt="{{ trip.title }} thumbnail" onclick="goToSlide({{ forloop.counter }})">
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <!-- ===== BOOK BUTTON ===== -->
       {% if first_event %}
         <a href="{% url 'getaway:book_trip' first_event.id %}" class="book-btn">Book this Trip</a>
       {% endif %}
@@ -37,12 +48,10 @@
 
     <!-- ===== RIGHT SIDE: DESCRIPTION + DETAILS ===== -->
     <div class="trip-right">
-      <!-- Description -->
       <div class="trip-description">
         <p>{{ trip.description }}</p>
       </div>
 
-      <!-- Trip Info -->
       <div class="trip-info">
         <p><strong>Distance:</strong> {{ trip.distance_display }}</p>
         <p><strong>Duration:</strong> {{ trip.duration }}</p>
@@ -55,8 +64,7 @@
         {% endif %}
       </div>
     </div>
-
-  </div> <!-- /trip-layout -->
+  </div>
 
   <!-- Back Button -->
   <div class="back-btn-container">
@@ -68,12 +76,31 @@
 <!-- ===== Carousel Script ===== -->
 <script>
 let currentSlide = 0;
+
 function moveSlide(direction) {
-  const track = document.querySelector('.carousel-track');
   const slides = document.querySelectorAll('.carousel-img');
   if (slides.length === 0) return;
   currentSlide = (currentSlide + direction + slides.length) % slides.length;
+  updateCarousel();
+}
+
+function goToSlide(index) {
+  currentSlide = index;
+  updateCarousel();
+}
+
+function updateCarousel() {
+  const track = document.querySelector('.carousel-track');
+  const thumbs = document.querySelectorAll('.thumb-img');
   track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+  // Update active thumbnail border
+  thumbs.forEach((t, i) => {
+    t.classList.toggle('active-thumb', i === currentSlide);
+  });
 }
 </script>
+
+
+
 {% endblock %}

@@ -818,9 +818,9 @@ nav a:hover { text-decoration: underline; }
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 500px; /* change this to make it bigger */
+  height: 500px;
   border-radius: 10px;
-  background: transparent; /* remove any fallback background */
+  background: transparent;
 }
 
 /* Carousel track */
@@ -857,8 +857,35 @@ nav a:hover { text-decoration: underline; }
   border-radius: 50%;
 }
 
+
 .carousel-btn.prev { left: 10px; }
 .carousel-btn.next { right: 10px; }
+
+
+
+<!-- ===== Styling for Thumbnails ===== -->
+
+.thumbnail-strip {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.thumb-img {
+  width: 142px;
+  height: 120px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+.thumb-img:hover {
+  border-color: #aaa;
+}
+.active-thumb {
+  border-color: #007bff;
+}
 
 
 /* Book button below carousel */
