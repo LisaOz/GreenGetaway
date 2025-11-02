@@ -1,27 +1,39 @@
 {% extends "getaway/base.html" %}
 {% load static %}
 
-{% block title %}Log in{% endblock %}
+{% block title %}Log In{% endblock %}
 
 {% block content %}
-  <h1>Log in</h1>
+<div class="form-container">
+  <h2>Log in</h2>
+  <p class="description">to continue your Green Getaway adventure.</p>
 
-  {% if form.errors %}
-    <p>Your username and password do not match. Please try again.</p>
-  {% else %}
+  <form method="post" action="{% url 'accounts:login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    {% if form.errors %}
+      <div class="alert">
+        <ul>
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+          <li>Your username and password do not match. Please try again.</li>
+        </ul>
+      </div>
+    {% endif %}
+
+    <input type="hidden" name="next" value="{{ next|default:'getaway/account/dashboard/' }}">
+    <input type="submit" value="Log In">
+  </form>
+
+  <div class="extra-links">
     <p>
-      Please use this form to log in.<br>
-      If you do not have an account, <a href="{% url 'accounts:register' %}">register here</a>.<br>
+      Don't have an account? <a href="{% url 'accounts:register' %}">Register here</a>.<br>
       <a href="{% url 'accounts:password_reset' %}">Forgot your password?</a>
     </p>
-  {% endif %}
-
-  <div class="login-form">
-    <form action="{% url 'accounts:login' %}" method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="hidden" name="next" value="{{ next|default:'getaway/account/dashboard/' }}" />
-      <p><input type="submit" value="Login"></p>
-    </form>
   </div>
+</div>
 {% endblock %}

@@ -1,5 +1,6 @@
 
 /* ===== General Reset ===== */
+
 * {
     margin: 0;
     padding: 0;
@@ -8,12 +9,17 @@
 }
 
 /* ===== Body ===== */
-body {
-    background: #f9fafb;
+html, body {
+    height: 100%;           /* ensure full height */
+    min-height: 100vh;      /* fallback for some browsers */
+    margin: 0;
+    padding: 0;
+    background-color: #c8e6c9; /* light green */
     color: #333;
     line-height: 1.6;
-    min-height: 100vh;
+
 }
+
 
 /* ===== Header ===== */
 header {
@@ -1000,4 +1006,105 @@ nav a:hover { text-decoration: underline; }
     background: linear-gradient(135deg, #1f5c5d, #063838);
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 10px 22px rgba(0,0,0,0.3);
+}
+
+
+
+/* forms styling */
+.form-container {
+  max-width: 480px;
+  margin: 60px auto;
+  padding: 30px;
+  background: #c8e6c9; /*mint green*/
+  border-radius: 12px;
+
+
+}
+
+.form-container h2,
+.form-container h3 {
+  text-align: center;
+  color: #276749; /* darkest forest green */
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.form-container p.description {
+  text-align: center;
+  color: #555;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
+.form-container input[type="number"],
+.form-container select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+  border-color: #2e8b57;
+  box-shadow: 0 0 4px rgba(46, 139, 87, 0.4);
+  outline: none;
+}
+
+.form-container .btn-primary,
+.form-container input[type="submit"] {
+  background-color: #2e8b57;
+  color: #fff;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-container .btn-primary:hover,
+.form-container input[type="submit"]:hover {
+  background-color: #276c47;
+}
+
+.form-container .alert {
+  background-color: #f8d7da;
+  border-left: 4px solid #dc3545;
+  color: #721c24;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+
+.form-container .extra-links {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.form-container .extra-links a {
+  color: #2e8b57;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-container .extra-links a:hover {
+  text-decoration: underline;
 }
