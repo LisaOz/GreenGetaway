@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'getaway', # app trips
+    'accounts', # app accounts
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
 
 ROOT_URLCONF = 'GreenGetaway.urls'
 
@@ -69,6 +74,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'GreenGetaway.wsgi.application'
 
+
+# For development: print emails to the console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

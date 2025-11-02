@@ -5,10 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cfb8db7-bbcf-4437-b0f6-9cb43fbbc1a5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/accounts/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/accounts/dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/accounts/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/accounts/password_reset.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/accounts/password_reset_confirm.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/accounts/password_reset_done.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/accounts/password_reset_email.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/getaway/templates/accounts/register.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getaway/static/getaway/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/static/getaway/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getaway/templates/getaway/trip_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/templates/getaway/trip_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GreenGetaway/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/GreenGetaway/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GreenGetaway/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GreenGetaway/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/getaway/templates/getaway/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/templates/getaway/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/getaway/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +83,26 @@
           <url>file://$PROJECT_DIR$/getaway/urls.py</url>
           <line>6</line>
           <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/accounts/urls.py</url>
+          <line>5</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/accounts/views.py</url>
+          <line>154</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/accounts/views.py</url>
+          <line>85</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/accounts/urls.py</url>
+          <line>16</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
