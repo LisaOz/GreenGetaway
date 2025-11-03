@@ -122,6 +122,7 @@ class Booking(models.Model):
     email = models.EmailField()
     num_people = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
 
     def clean(self):
         # Validate that the number of people does not exceed available places.

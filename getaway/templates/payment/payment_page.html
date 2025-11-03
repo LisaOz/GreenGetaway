@@ -1,0 +1,13 @@
+{% extends "getaway/base.html" %}
+{% load static %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+    <h1>Your Booking</h1>
+
+    <form action="{% url 'payment:process' %}" method="post">
+        <input type="submit" value="Pay now">
+        {% csrf_token %}
+    </form>
+{% endblock %}

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,8 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(v=0)zj2_96a4vhk@$o2aqz@299e2a$wq%!(v9f#b7a6i0))i2'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -108,10 +108,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-(v=0)zj2_96a4vhk@$o2aqz@299e2a$wq%!(v9f#b7a6i0))i2'
 
-# Stripe keys for testing
-STRIPE_PUBLIC_KEY = "pk_test_..."
-STRIPE_SECRET_KEY = "sk_test_..."
+# Stripe keys for testing, saved in config
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_API_VERSION = '2025-05-10'
 
 
 # Internationalization

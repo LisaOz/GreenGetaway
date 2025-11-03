@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Cancelled{% endblock %}
+
+{% block content %}
+<div style="text-align:center; padding:50px;">
+    <h2>Payment Cancelled</h2>
+    <p>Your payment was not completed. You can try again or contact support if needed.</p>
+    <a href="{% url 'payment:create' booking.id %}" class="btn btn-warning">Try Again</a>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Return to Home</a>
+</div>
+{% endblock %}

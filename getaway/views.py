@@ -86,10 +86,8 @@ def book_trip(request, trip_id):
             # Update booked_places
             trip_event.booked_places += booking.num_people
             trip_event.save()
-            return render(request, 'getaway/booking_success.html', {
-                'booking': booking,
-                'trip_event': trip_event
-            })
+            return redirect('payment:create', booking_id=booking.id)
+
         else:
             return render(request, 'getaway/booking_failed.html', {
                 'trip_event': trip_event
