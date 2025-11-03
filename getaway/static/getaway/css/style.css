@@ -1012,6 +1012,7 @@ nav a:hover { text-decoration: underline; }
 
 /* forms styling */
 .form-container {
+
   max-width: 480px;
   margin: 60px auto;
   padding: 30px;
@@ -1078,11 +1079,21 @@ nav a:hover { text-decoration: underline; }
   padding: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
+
 }
 
 .form-container .btn-primary:hover,
 .form-container input[type="submit"]:hover {
-  background-color: #276c47;
+  background-color: #256b45; /* slightly darker green on hover */
+  transform: translateY(-2px); /* subtle lift effect */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* slightly bigger shadow */
+
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
 .form-container .alert {

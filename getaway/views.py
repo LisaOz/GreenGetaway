@@ -5,6 +5,7 @@ from .forms import BookingForm
 from django.db.models import Min
 
 
+
 # Create your views here.
 
 
@@ -61,33 +62,40 @@ View for a booking form. Allows to book the first upcoming event
 """
 
 
+# import your models/forms as needed
+
 def book_trip(request, trip_id):
     trip_event = get_object_or_404(TripEvent, id=trip_id)
 
-    if request.method == 'POST':
-        form = BookingForm(request.POST)
-        if form.is_valid():
-            booking = form.save(commit=False)
-            booking.trip = trip_event
+    # instantiate bound form if POST else unbound form
+    form = BookingForm(request.POST or None)
 
-            # Check if enough slots are available
-            if booking.num_people <= trip_event.available_places:
-                booking.save()
-                # Optionally update booked_places
-                trip_event.booked_places += booking.num_people
-                trip_event.save()
-                return render(request, 'getaway/booking_success.html', {
-                    'booking': booking,
-                    'trip_event': trip_event
-                })
-            else:
-                # Not enough places available
-                return render(request, 'getaway/booking_failed.html', {
-                    'trip_event': trip_event
-                })
-    else:
-        form = BookingForm()
+    # Set the queryset to the tripevent to filter the trips by same name
+    form.fields['trip'].queryset = TripEvent.objects.filter(trip=trip_event.trip)
 
+    # pre-select the current trip_event in the form
+    form.initial.setdefault('trip', trip_event.id)
+
+    if request.method == 'POST' and form.is_valid():
+        booking = form.save(commit=False)
+        booking.trip = trip_event
+
+        # Check if enough slots are available
+        if booking.num_people <= trip_event.available_places:
+            booking.save()
+            # Update booked_places
+            trip_event.booked_places += booking.num_people
+            trip_event.save()
+            return render(request, 'getaway/booking_success.html', {
+                'booking': booking,
+                'trip_event': trip_event
+            })
+        else:
+            return render(request, 'getaway/booking_failed.html', {
+                'trip_event': trip_event
+            })
+
+    # render filtered form for GET or invalid POST
     return render(request, 'getaway/booking_form.html', {
         'form': form,
         'trip_event': trip_event

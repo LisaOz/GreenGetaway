@@ -4,12 +4,13 @@
 
 {% block content %}
 <div class="form-container">
-  <h1>Book your Trip: {{ trip_event.trip.title }}</h1>
+
+  <h3>{{ trip_event.trip.title }}</h3>
 
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Book Now</button>
+
     {% if form.errors %}
       <div class="alert">
         <ul>
@@ -22,8 +23,9 @@
         </ul>
       </div>
     {% endif %}
-
-
+    <div class="button-wrapper">
+      <p><input type="submit" class="btn btn-primary mt-2" value="Proceed to Payment"></p>
+    </div>
   </form>
 
 </div>
