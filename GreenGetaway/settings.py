@@ -109,6 +109,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Stripe keys for testing
+STRIPE_PUBLIC_KEY = "pk_test_..."
+STRIPE_SECRET_KEY = "sk_test_..."
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
