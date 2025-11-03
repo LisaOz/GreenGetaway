@@ -1,13 +1,30 @@
 {% extends 'getaway/base.html' %}
 {% load static %}
 
-{% block content %}
-<h1>Book your Trip: {{ trip_event.trip.title }}</h1>
 
-<form method="post">
+{% block content %}
+<div class="form-container">
+  <h1>Book your Trip: {{ trip_event.trip.title }}</h1>
+
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Book Now</button>
-</form>
+    {% if form.errors %}
+      <div class="alert">
+        <ul>
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+          <li>Please check the fields and try again.</li>
+        </ul>
+      </div>
+    {% endif %}
 
+
+  </form>
+
+</div>
 {% endblock %}
