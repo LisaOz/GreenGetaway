@@ -13,5 +13,6 @@ urlpatterns = [
     path('category/<slug:slug>/', views.category_trips, name='category_trips'),
     path('trip/<slug:slug>/', views.trip_detail, name='trip_detail'),
     path('trip/<int:trip_id>/book/', views.book_trip, name='book_trip'),
+    path('dashboard/', views.user_dashboard, name='user_dashboard'),
 
     ]

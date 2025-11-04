@@ -1,0 +1,42 @@
+{% extends 'getaway/base.html' %}
+
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+
+<h2>Welcome, {{ request.user.first_name|default:request.user.username }}!</h2>
+<p>Total bookings: {{ upcoming_bookings|length }} upcoming, {{ past_bookings|length }} past</p>
+<h3>Upcoming Trips</h3>
+{% if upcoming_bookings %}
+    <ul>
+    {% for booking in upcoming_bookings %}
+        <li>
+            {{ booking.trip.trip.title }} — {{ booking.trip.date }} —
+            {{ booking.num_people }} people — £{{ booking.price }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No upcoming trips.</p>
+{% endif %}
+
+<h3>Past Trips</h3>
+{% if past_bookings %}
+    <ul>
+    {% for booking in past_bookings %}
+        <li>
+            {{ booking.trip.name }} — {{ booking.trip.date }} —
+            {{ booking.num_people }} people — £{{ booking.price }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No past trips.</p>
+{% endif %}
+
+<!-- ===== BACK BUTTON ===== -->
+  <div class="back-btn-container">
+    <a href="{% url 'getaway:home' %}" class="back-btn">← Back</a>
+  </div>
+
+{% endblock %}

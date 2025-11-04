@@ -1,4 +1,9 @@
-from .models import Category, Trip
+from datetime import date
+
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+
+from .models import Category, Trip, Booking
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import TripEvent
 from .forms import BookingForm
@@ -102,3 +107,24 @@ def book_trip(request, trip_id):
         'form': form,
         'trip_event': trip_event
     })
+
+
+"""
+View for user dashboard
+"""
+@login_required
+def user_dashboard(request):
+    username = request.user.username  # use username for fetching the user bookings
+    # get all bookings for this user by name
+    bookings = Booking.objects.filter(name__iexact=username).select_related('trip', 'trip__trip').order_by('-trip__date')
+
+    # split into upcoming and past
+    upcoming_bookings = [b for b in bookings if b.trip.date >= date.today()]
+    past_bookings = [b for b in bookings if b.trip.date < date.today()]
+
+    return render(request, 'getaway/user_dashboard.html', {
+        'upcoming_bookings': upcoming_bookings,
+        'past_bookings': past_bookings,
+    })
+
+    return render(request, 'getaway/user_dashboard.html', context)

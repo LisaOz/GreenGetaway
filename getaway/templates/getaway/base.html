@@ -20,6 +20,8 @@
         <div class="user mt-3">
                 {% if request.user.is_authenticated %}
                    <span class="me-2">Hello {{ request.user.first_name|default:request.user.username }},</span>
+                    <a href="{% url 'getaway:user_dashboard' %}" class="btn btn-primary btn-sm">Go to Dashboard</a>
+
                     <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
