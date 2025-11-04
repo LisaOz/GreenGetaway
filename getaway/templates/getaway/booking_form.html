@@ -16,10 +16,9 @@
         <ul>
           {% for field, errors in form.errors.items %}
             {% for error in errors %}
-              <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+              </strong> {{ error }}
             {% endfor %}
           {% endfor %}
-          <li>Please check the fields and try again.</li>
         </ul>
       </div>
     {% endif %}

@@ -1,0 +1,14 @@
+Hi {{ booking.name }},
+
+Thank you for booking your adventure with us! Here are your booking details:
+
+Booking ID: {{ booking.id }}
+Trip Name: {{ booking.trip.trip.title }}
+Date: {{ booking.trip.date }}
+Number of People: {{ booking.num_people }}
+Total Price: £{{ total_amount }}
+
+We are looking forward to welcoming you on this amazing green getaway adventure!
+
+Safe travels,
+The GreenGetaway Team
