@@ -14,10 +14,10 @@ from django.template.loader import render_to_string
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-
 """
 Vies for payment in the process with all details
 """
+
 
 def payment_create(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
@@ -55,10 +55,14 @@ def payment_create(request, booking_id):
 """
 View for successfully completed payment with the confirmation email with all detaild
 """
+
+
 def payment_completed(request):
     booking_id = request.session.get('booking_id')
+    booking = None
+
     if booking_id:
-        booking = Booking.objects.get(id=booking_id)
+        booking = get_object_or_404(Booking, id=booking_id)
 
         # Send confirmation email
         send_confirmation_email(booking)
@@ -66,12 +70,14 @@ def payment_completed(request):
         # Clear booking_id from session
         del request.session['booking_id']
 
-    return render(request, "payment/completed.html")
+    return render(request, "payment/completed.html", {'booking': booking})
 
 
 """
 View for confirmation email after successful payment
 """
+
+
 def send_confirmation_email(booking):
     subject = f"Booking Confirmation - ID {booking.id}"
     message = render_to_string('emails/booking_confirmation.txt', {
@@ -85,13 +91,14 @@ def send_confirmation_email(booking):
         'GreenGetaway@example.com',  # From
         [booking.email],             # To
     )
-
-    # Send email saved in txt file
-    email.send()
+    email.content_subtype = "plain"
+    email.send() # Send confirmation email in the text file
 
 
 """
 View for cancelled booking
 """
+
+
 def payment_cancel(request):
     return render(request, "payment/cancel.html")

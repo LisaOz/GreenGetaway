@@ -4,8 +4,6 @@ from .models import TripEvent
 from .forms import BookingForm
 from django.db.models import Min
 
-
-
 # Create your views here.
 
 
@@ -21,7 +19,6 @@ def home(request):
         {'name': 'Abroad Travels', 'image': 'getaway/images/abroad.jpg'},
     ]
     return render(request, 'getaway/home.html', {'categories': categories})
-
 
 
 """
@@ -49,6 +46,7 @@ def category_trips(request, slug):
 View for a separate trip with description and other details
 """
 
+
 def trip_detail(request, slug):
     trip = get_object_or_404(Trip, slug=slug)
     first_event = trip.events.filter(status='upcoming').first()
@@ -56,6 +54,7 @@ def trip_detail(request, slug):
         'trip': trip,
         'first_event': first_event
     })
+
 
 """
 View for a booking form. Allows to book the first upcoming event
@@ -79,18 +78,23 @@ def book_trip(request, trip_id):
     if request.method == 'POST' and form.is_valid():
         booking = form.save(commit=False)
         booking.trip = trip_event
+        booking.price = trip_event.trip.price # set booking price for the trip being booked
 
-        # Check if enough slots are available
-        if booking.num_people <= trip_event.available_places:
+        available_places = trip_event.max_places - trip_event.booked_places
+
+        # Check if enough slots are available and update booked_places only after a successful booking
+        if booking.num_people <= available_places:
             booking.save()
             # Update booked_places
             trip_event.booked_places += booking.num_people
             trip_event.save()
+
             return redirect('payment:create', booking_id=booking.id)
 
         else:
             return render(request, 'getaway/booking_failed.html', {
-                'trip_event': trip_event
+                'trip_event': trip_event,
+                'available_places': max(available_places, 0),
             })
 
     # render filtered form for GET or invalid POST

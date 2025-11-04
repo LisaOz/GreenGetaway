@@ -6,6 +6,7 @@
 <div style="text-align:center; padding:50px;">
     <h2>Payment Successful</h2>
     <p>Thank you for your payment. Your booking is confirmed.</p>
+    <p>We have sent a confirmation to <strong>{{ booking.email }}</strong>.</p>
 
     <a href="{% url 'getaway:home' %}" class="btn btn-primary">Return to Home</a>
 </div>
