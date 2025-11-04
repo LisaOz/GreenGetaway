@@ -1,11 +1,12 @@
-{% extends "base.html" %}
+{% extends "getaway/base.html" %}
 
 {% block title %}Payment Completed{% endblock %}
 
 {% block content %}
 <div style="text-align:center; padding:50px;">
-    <h2>Payment Successful!</h2>
+    <h2>Payment Successful</h2>
     <p>Thank you for your payment. Your booking is confirmed.</p>
-    <a href="{% url 'home' %}" class="btn btn-primary">Return to Home</a>
+
+    <a href="{% url 'getaway:home' %}" class="btn btn-primary">Return to Home</a>
 </div>
 {% endblock %}

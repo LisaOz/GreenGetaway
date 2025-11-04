@@ -141,7 +141,7 @@ class Booking(models.Model):
     @property
     def total_amount(self):
         # Calculate total price for the booking.
-        return self.num_people * self.trip.price_per_person
+        return self.num_people * self.trip.price
 
     def __str__(self):
         return f"Booking by {self.name} for {self.trip}"

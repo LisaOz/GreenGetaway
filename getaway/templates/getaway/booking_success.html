@@ -7,6 +7,6 @@
     <p>Thank you for booking <strong>{{ trip_event.trip.title }}</strong> on <strong>{{ trip_event.date }}</strong> at <strong>{{ trip_event.time }}</strong>.</p>
     <p>We have sent a confirmation to <strong>{{ booking.email }}</strong>.</p>
 
-    <a href="{% url 'getaway:home' %}" class="btn">Back to Home</a>
+    <a href="{% url 'getaway/home' %}" class="btn">Back to Home</a>
 </div>
 {% endblock %}
