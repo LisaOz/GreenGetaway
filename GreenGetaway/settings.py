@@ -115,6 +115,7 @@ SECRET_KEY = 'django-insecure-(v=0)zj2_96a4vhk@$o2aqz@299e2a$wq%!(v9f#b7a6i0))i2
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_API_VERSION = '2025-05-10'
+STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
 
 # Internationalization

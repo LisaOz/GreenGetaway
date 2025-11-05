@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cfb8db7-bbcf-4437-b0f6-9cb43fbbc1a5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/accounts/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GreenGetaway/.env" beforeDir="false" afterPath="$PROJECT_DIR$/GreenGetaway/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GreenGetaway/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/GreenGetaway/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getaway/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getaway/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getaway/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/getaway/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
