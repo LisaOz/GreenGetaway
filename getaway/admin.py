@@ -55,6 +55,6 @@ class TripEventAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'trip', 'num_people', 'created_at')
+    list_display = ('name', 'email', 'trip', 'num_people', 'price', 'paid', 'created_at')
     list_filter = ('trip__trip__title', 'created_at')  # filter by trip title and date
     search_fields = ('name', 'email', 'trip__trip__title')

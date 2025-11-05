@@ -8,37 +8,35 @@ from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView
+from .forms import UserRegisterForm
 
 # Create your views here.
 
-"""
-View for registration form. When the user is registered, he is redirected to the login page
-"""
-
 # ---------------------------
 
-# Registration View
+# Register View
 
 # ---------------------------
 
 def register(request):
     """
-    Handles user registration.
-    GET: Show an empty registration form.
+    Handles user registration with email.
+    GET: Show registration form.
     POST: Validate and create a new user.
     """
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            # save the user to the database
+            user.save()
             messages.success(request, f"Account created successfully for {user.username}! You can now log in.")
             return redirect('accounts:login')
     else:
-        # This part was previously missing or mis-indented
-        form = UserCreationForm()
+        form = UserRegisterForm()
 
-    # Always return the template with the form (even if invalid)
     return render(request, 'accounts/register.html', {'form': form})
+
 
 # ---------------------------
 

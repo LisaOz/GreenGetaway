@@ -89,6 +89,7 @@ def book_trip(request, trip_id):
 
         # Check if enough slots are available and update booked_places only after a successful booking
         if booking.num_people <= available_places:
+
             booking.save()
             # Update booked_places
             trip_event.booked_places += booking.num_people
@@ -110,21 +111,23 @@ def book_trip(request, trip_id):
 
 
 """
-View for user dashboard
+View for user dashboard. Bookings belonging to the user are retrieved by the email, when the user is authenticated
 """
 @login_required
 def user_dashboard(request):
-    username = request.user.username  # use username for fetching the user bookings
-    # get all bookings for this user by name
-    bookings = Booking.objects.filter(name__iexact=username).select_related('trip', 'trip__trip').order_by('-trip__date')
+    user_email = request.user.email.strip().lower()  # normalise email
 
-    # split into upcoming and past
+    # Get all bookings linked to this user's email
+    bookings = Booking.objects.filter(email__iexact=user_email).select_related('trip', 'trip__trip').order_by('-trip__date')
+
+    # Separate into upcoming and past based on the trip date
     upcoming_bookings = [b for b in bookings if b.trip.date >= date.today()]
     past_bookings = [b for b in bookings if b.trip.date < date.today()]
 
-    return render(request, 'getaway/user_dashboard.html', {
+    context = {
         'upcoming_bookings': upcoming_bookings,
         'past_bookings': past_bookings,
-    })
+        'user_email': user_email,
+    }
 
     return render(request, 'getaway/user_dashboard.html', context)
