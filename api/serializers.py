@@ -2,7 +2,7 @@ from rest_framework import serializers
 from getaway.models import Category, Trip, Booking
 from rest_framework import serializers
 from getaway.models import Trip
-from getaway.models import Booking
+from getaway.models import Booking, TripEvent
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,3 +24,4 @@ class BookingSerializer(serializers.ModelSerializer):
         model = Booking
         fields = ['id', 'trip', 'name', 'email', 'num_people', 'created_at', 'price', 'paid']
         read_only_fields = ['id', 'created_at', 'paid']
+
