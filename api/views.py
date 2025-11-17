@@ -1,9 +1,9 @@
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from getaway.models import Category, Trip
-from .serializers import CategorySerializer, TripSerializer
-
+from .serializers import CategorySerializer, TripSerializer, BookingSerializer
 
 # Create your views here.
 """
@@ -43,3 +43,15 @@ class TripDetail(APIView):
         return Response(serializer.data)
 
 
+
+@api_view(['POST'])
+def booking_create(request):
+    """
+    API endpoint to create a new booking from Flutter app.
+    Expects JSON with: trip, name, email, num_people, and price
+    """
+    serializer = BookingSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()  # saves booking in DB
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
