@@ -7,7 +7,7 @@ from datetime import datetime
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
-
+    image = models.ImageField(upload_to='trip_images/', blank=True, null=True)
     class Meta:
         verbose_name = "Category"
         verbose_name_plural = "Categories"
