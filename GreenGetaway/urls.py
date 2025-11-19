@@ -18,7 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
+from api.views import register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +31,7 @@ urlpatterns = [
     path('', include('getaway.urls', namespace='getaway')), # getaway app
     path('accounts/', include('accounts.urls')), # accounts app
     path('api/', include('api.urls')),
+
 
 ]
 

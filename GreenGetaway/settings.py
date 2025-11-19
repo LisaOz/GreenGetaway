@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'getaway', # app trips
     'accounts', # app accounts
     'payment', # app payment
+     'rest_framework_simplejwt',
     'api',
+
 ]
 
 MIDDLEWARE = [
@@ -164,4 +166,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CART_SESSION_ID = 'booking_cart'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
