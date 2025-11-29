@@ -11,6 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class TripSerializer(serializers.ModelSerializer):
     class Meta:
+
         model = Trip
         fields = '__all__'
 

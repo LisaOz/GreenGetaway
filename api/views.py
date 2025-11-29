@@ -1,19 +1,79 @@
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from GreenGetaway import settings
 from getaway.models import Category, Trip
 from .serializers import CategorySerializer, TripSerializer, BookingSerializer
-
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+import stripe
+import json
 
 
 
 # Create your views here.
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+"""
+Endpoint for Payment intent creation with the CSRF exemption, so this endpoint will ignore CSRF
+and could be used in mobile app
+"""
+@csrf_exempt # Exempt CSRF because Flutter POST won’t send CSRF token
+def create_payment_intent(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=400)
+
+    data = json.loads(request.body)
+    amount = data.get("amount")
+
+    try:
+        intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency="gbp",
+        )
+        return JsonResponse({"clientSecret": intent.client_secret})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
+"""
+Endpoint for checkout session
+"""
+@csrf_exempt
+def create_checkout_session(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=400)
+
+    data = json.loads(request.body)
+    amount = data.get("amount")
+    trip_id = data.get("trip_id")
+
+    try:
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": "gbp",
+                    "product_data": {
+                        "name": f"Trip Booking ID: {trip_id}",
+                    },
+                    "unit_amount": amount,  # amount in pence
+                },
+                "quantity": 1,
+            }],
+            mode="payment",
+            success_url=f"{settings.FRONTEND_URL}/booking/success?trip_id={trip_id}",
+            cancel_url=f"{settings.FRONTEND_URL}/booking/cancel",
+        )
+        return JsonResponse({"url": session.url})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
 """
 CategoryList APIView to give Flutter list of trip categories.
 """

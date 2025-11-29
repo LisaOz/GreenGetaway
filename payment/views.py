@@ -6,11 +6,16 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from .models import Booking
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import stripe
+import json
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# ----------------------------
+
+
+
 # Payment creation
 # ----------------------------
 def payment_create(request, booking_id):
