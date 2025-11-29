@@ -44,76 +44,60 @@ def create_payment_intent(request):
 """
 Endpoint for checkout session
 """
+# Set your Stripe secret key from Django settings
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+# Exempt this view from CSRF checks because Flutter app won't send CSRF token
 @csrf_exempt
 def create_checkout_session(request):
+    # Ensure only POST requests are allowed
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=400)
 
-    data = json.loads(request.body)
-    amount = data.get("amount")
-    trip_id = data.get("trip_id")
-
     try:
-        session = stripe.checkout.Session.create(
-            payment_method_types=["card"],
-            line_items=[{
-                "price_data": {
-                    "currency": "gbp",
-                    "product_data": {
-                        "name": f"Trip Booking ID: {trip_id}",
-                    },
-                    "unit_amount": amount,  # amount in pence
-                },
-                "quantity": 1,
-            }],
-            mode="payment",
-            success_url=f"{settings.FRONTEND_URL}/booking/success?trip_id={trip_id}",
-            cancel_url=f"{settings.FRONTEND_URL}/booking/cancel",
-        )
-        return JsonResponse({"url": session.url})
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=400)
+        # Parse JSON data from request body
+        data = json.loads(request.body)
 
-"""
-Cheackout session view for Flutter that returns a Stripe Checkout URL.
-"""
-@csrf_exempt
-def create_checkout_session(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "POST required"}, status=400)
+        # Extract relevant fields from request
+        amount = data.get("amount")  # total amount in pence
+        currency = data.get("currency", "gbp")  # default to GBP
+        trip_id = data.get("trip_id")  # trip being booked
+        name = data.get("name")  # customer name
+        email = data.get("email")  # customer email
+        num_people = data.get("num_people")  # number of people booking
 
-    data = json.loads(request.body)
-    amount = data.get("amount")
-    currency = data.get("currency", "gbp")
-    trip_id = data.get("trip_id")
-    name = data.get("name")
-    email = data.get("email")
-    num_people = data.get("num_people")
+        # Validate that all required fields are present
+        if not all([amount, trip_id, name, email, num_people]):
+            return JsonResponse({"error": "Missing required fields"}, status=400)
 
-    try:
         # Create a Stripe Checkout session
         session = stripe.checkout.Session.create(
-            payment_method_types=["card"],
+            payment_method_types=["card"],  # Only allow card payments
             line_items=[{
                 "price_data": {
                     "currency": currency,
                     "product_data": {
+                        # Display name for the booking in Stripe Checkout
                         "name": f"Trip Booking ID {trip_id}: {name}",
                     },
-                    "unit_amount": amount,
+                    "unit_amount": amount,  # Stripe expects amount in the smallest currency unit (pence)
                 },
-                "quantity": 1,
+                "quantity": 1,  # Only 1 line item for the booking
             }],
-            mode="payment",
+            mode="payment",  # Single payment
+            # Where the user is redirected after successful payment
             success_url=f"{settings.FRONTEND_URL}/booking-success/?trip_id={trip_id}&num_people={num_people}",
+            # Where the user is redirected if they cancel the payment
             cancel_url=f"{settings.FRONTEND_URL}/booking-cancel/",
-            customer_email=email,
+            customer_email=email,  # Prefill email in Stripe Checkout
         )
+
+        # Return the URL of the Stripe Checkout session to the Flutter app
         return JsonResponse({"checkout_url": session.url})
+
     except Exception as e:
+        # Return any errors as JSON to the Flutter app
         return JsonResponse({"error": str(e)}, status=400)
-
-
 
 
 """
