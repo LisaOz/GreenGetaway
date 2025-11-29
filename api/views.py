@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from GreenGetaway import settings
+from django.conf import settings
 from getaway.models import Category, Trip
 from .serializers import CategorySerializer, TripSerializer, BookingSerializer
 from django.contrib.auth.models import User
@@ -73,6 +73,48 @@ def create_checkout_session(request):
         return JsonResponse({"url": session.url})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
+
+"""
+Cheackout session view for Flutter that returns a Stripe Checkout URL.
+"""
+@csrf_exempt
+def create_checkout_session(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=400)
+
+    data = json.loads(request.body)
+    amount = data.get("amount")
+    currency = data.get("currency", "gbp")
+    trip_id = data.get("trip_id")
+    name = data.get("name")
+    email = data.get("email")
+    num_people = data.get("num_people")
+
+    try:
+        # Create a Stripe Checkout session
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": currency,
+                    "product_data": {
+                        "name": f"Trip Booking ID {trip_id}: {name}",
+                    },
+                    "unit_amount": amount,
+                },
+                "quantity": 1,
+            }],
+            mode="payment",
+            success_url=f"{settings.FRONTEND_URL}/booking-success/?trip_id={trip_id}&num_people={num_people}",
+            cancel_url=f"{settings.FRONTEND_URL}/booking-cancel/",
+            customer_email=email,
+        )
+        return JsonResponse({"checkout_url": session.url})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
+
+
 
 """
 CategoryList APIView to give Flutter list of trip categories.
