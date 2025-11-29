@@ -96,7 +96,7 @@ def create_checkout_session(request):
         return JsonResponse({"checkout_url": session.url})
 
     except Exception as e:
-        # Return any errors as JSON to the Flutter app
+        # Return error message if anything goes wrong
         return JsonResponse({"error": str(e)}, status=400)
 
 
