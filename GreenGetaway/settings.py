@@ -107,6 +107,9 @@ DATABASES = {
 }
 
 
+# For Flutter emulator
+FRONTEND_URL = "greengetaway://booking-success"
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

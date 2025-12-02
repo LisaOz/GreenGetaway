@@ -1,12 +1,8 @@
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status
-from rest_framework.decorators import api_view
+from django.http import JsonResponse, HttpResponse
 from rest_framework.views import APIView
-from rest_framework.response import Response
-
 from django.conf import settings
-from getaway.models import Category, Trip
+from getaway.models import Category, Trip, Booking
 from .serializers import CategorySerializer, TripSerializer, BookingSerializer
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -15,11 +11,71 @@ from rest_framework.response import Response
 import stripe
 import json
 
-
-
 # Create your views here.
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+@csrf_exempt
+def stripe_webhook(request):
+    """
+    Stripe webhook endpoint to handle events like checkout.session.completed.
+    This endpoint is CSRF-exempt because Stripe cannot send a CSRF token.
+    """
+
+    # 1️. Read the raw request body and Stripe signature header
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+
+    # 2️. Verify the webhook signature
+    try:
+        event = stripe.Webhook.construct_event(
+            payload=payload,
+            sig_header=sig_header,
+            secret=endpoint_secret
+        )
+    except ValueError:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # 3️. Handle the Stripe event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+
+        # 4️. Extract metadata and customer details
+        trip_id = session['metadata'].get('trip_id')
+        num_people = session['metadata'].get('num_people')
+        name = session['metadata'].get('name')
+        email = session.get('customer_email')  # email sent by Stripe
+
+        # 5. Convert numeric fields
+        try:
+            trip_id = int(trip_id)
+            num_people = int(num_people)
+        except (TypeError, ValueError):
+            # If conversion fails, skip creating booking
+            return HttpResponse(status=400)
+
+        # 6️. Create the Booking in your database
+        try:
+            Booking.objects.create(
+                trip_id=trip_id,
+                name=name,
+                email=email,
+                num_people=num_people,
+                paid=True  # mark as paid since payment succeeded
+            )
+            print(f"Booking created: trip {trip_id}, {num_people} person(s), email: {email}")
+        except Exception as e:
+            print(f"Error creating booking: {e}")
+            return HttpResponse(status=500)
+
+    # 7️. Return 200 to acknowledge receipt of the webhook
+    return HttpResponse(status=200)
+
 """
 Endpoint for Payment intent creation with the CSRF exemption, so this endpoint will ignore CSRF
 and could be used in mobile app
@@ -44,61 +100,62 @@ def create_payment_intent(request):
 """
 Endpoint for checkout session
 """
-# Set your Stripe secret key from Django settings
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# Exempt this view from CSRF checks because Flutter app won't send CSRF token
-@csrf_exempt
+
+@csrf_exempt  # Important! Flutter POST won’t send CSRF
 def create_checkout_session(request):
-    # Ensure only POST requests are allowed
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=400)
 
+
     try:
-        # Parse JSON data from request body
         data = json.loads(request.body)
+        print("PARSED JSON:", data)
 
-        # Extract relevant fields from request
-        amount = data.get("amount")  # total amount in pence
-        currency = data.get("currency", "gbp")  # default to GBP
-        trip_id = data.get("trip_id")  # trip being booked
-        name = data.get("name")  # customer name
-        email = data.get("email")  # customer email
-        num_people = data.get("num_people")  # number of people booking
+        amount = data.get("amount")
+        trip_id = data.get("trip_id")
+        name = data.get("name")
+        email = data.get("email")
+        num_people = data.get("num_people")
 
-        # Validate that all required fields are present
         if not all([amount, trip_id, name, email, num_people]):
+            print("Missing required fields!")
             return JsonResponse({"error": "Missing required fields"}, status=400)
 
-        # Create a Stripe Checkout session
+        # Deep link redirect
+        success_url = f"greengetaway://booking-success?trip_id={trip_id}&num_people={num_people}"
+        cancel_url = "greengetaway://payment-cancelled"
+
+        # Create Stripe session
         session = stripe.checkout.Session.create(
-            payment_method_types=["card"],  # Only allow card payments
+            payment_method_types=["card"],
             line_items=[{
                 "price_data": {
-                    "currency": currency,
-                    "product_data": {
-                        # Display name for the booking in Stripe Checkout
-                        "name": f"Trip Booking ID {trip_id}: {name}",
-                    },
-                    "unit_amount": amount,  # Stripe expects amount in the smallest currency unit (pence)
+                    "currency": "gbp",
+                    "product_data": {"name": f"Trip Booking ID {trip_id}: {name}"},
+                    "unit_amount": amount,
                 },
-                "quantity": 1,  # Only 1 line item for the booking
+                "quantity": 1,
             }],
-            mode="payment",  # Single payment
-            # Where the user is redirected after successful payment
-            success_url=f"{settings.FRONTEND_URL}/booking-success/?trip_id={trip_id}&num_people={num_people}",
-            # Where the user is redirected if they cancel the payment
+            mode="payment",
+
             cancel_url=f"{settings.FRONTEND_URL}/booking-cancel/",
-            customer_email=email,  # Prefill email in Stripe Checkout
+            customer_email=email,
+            metadata={
+                "trip_id": str(trip_id),
+                "num_people": str(num_people),
+                "name": name,
+                "email": email
+            }
         )
 
-        # Return the URL of the Stripe Checkout session to the Flutter app
+
+        print("Stripe session created:", session.id)
         return JsonResponse({"checkout_url": session.url})
 
     except Exception as e:
-        # Return error message if anything goes wrong
+        print("STRIPE ERROR:", str(e))
         return JsonResponse({"error": str(e)}, status=400)
-
 
 """
 CategoryList APIView to give Flutter list of trip categories.

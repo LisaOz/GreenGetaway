@@ -4,8 +4,8 @@ from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
+    path('create-checkout-session/', views.create_checkout_session, name='create-checkout-session'),
     path("create-payment-intent/", views.create_payment_intent),
-    path("api/create-checkout-session/", views.create_checkout_session, name="create-checkout-session"),
     path('categories/', CategoryList.as_view()),
     path('trips/', TripList.as_view()),
     path('trips/<int:pk>/', TripDetail.as_view()),
