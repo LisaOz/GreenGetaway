@@ -27,10 +27,11 @@ from api.views import register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('payment/', include('payment.urls')),  # payment app
+    path('payment/', include('payment.urls')),  # payment URLs including webhook
     path('', include('getaway.urls', namespace='getaway')), # getaway app
     path('accounts/', include('accounts.urls')), # accounts app
-    path('api/', include('api.urls')),
+    path('api/', include('api.urls')), # API endpoints
+
 
 
 ]
