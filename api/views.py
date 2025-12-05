@@ -20,6 +20,11 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
    """
 @csrf_exempt
 def stripe_webhook(request):
+    print("=== WEBHOOK HIT ===")
+    print("Request method:", request.method)
+    print("Request headers:", request.headers)
+    print("Request body length:", len(request.body))
+
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -30,25 +35,36 @@ def stripe_webhook(request):
             sig_header=sig_header,
             secret=endpoint_secret
         )
-        print("WEBHOOK EVENT RECEIVED:", event['type'])
+        print("WEBHOOK SIGNATURE VERIFIED")
+        print("Event type:", event['type'])
         session = event['data']['object']
         print("SESSION DATA:", session)
-        print("METADATA:", session.get('metadata'))
-        print("CUSTOMER EMAIL:", session.get('customer_email'))
+
+        # Always print metadata
+        metadata = session.get('metadata')
+        print("METADATA:", metadata)
+
+        # Always print customer email
+        customer_email = session.get('customer_email')
+        print("CUSTOMER EMAIL:", customer_email)
 
         if event['type'] == 'checkout.session.completed':
-            trip_id = session['metadata'].get('trip_id')
-            num_people = session['metadata'].get('num_people')
-            name = session['metadata'].get('name')
-            email = session.get('customer_email')
+            if not metadata:
+                print("No metadata found! Cannot create booking.")
+                return HttpResponse(status=400)
+
+            trip_id = metadata.get('trip_id')
+            num_people = metadata.get('num_people')
+            name = metadata.get('name')
+            email = customer_email
 
             print("Parsed booking info:", trip_id, num_people, name, email)
 
             try:
                 trip_id = int(trip_id)
                 num_people = int(num_people)
-            except (TypeError, ValueError):
-                print("Invalid trip_id or num_people")
+            except (TypeError, ValueError) as e:
+                print("Invalid trip_id or num_people:", e)
                 return HttpResponse(status=400)
 
             try:
@@ -59,16 +75,45 @@ def stripe_webhook(request):
                     num_people=num_people,
                     paid=True
                 )
-                print(f"Booking created: {booking}")
+                print(f"Booking created successfully: {booking}")
             except Exception as e:
                 print("Error creating booking:", e)
                 return HttpResponse(status=500)
 
+    except stripe.error.SignatureVerificationError as e:
+        print("Stripe signature verification failed:", e)
+        return HttpResponse(status=400)
+    except ValueError as e:
+        print("Invalid payload:", e)
+        return HttpResponse(status=400)
     except Exception as e:
-        print("Webhook error:", e)
+        print("Unexpected webhook error:", e)
         return HttpResponse(status=400)
 
+    print("Webhook processing completed successfully")
     return HttpResponse(status=200)
+
+"""
+Endpoint for Payment intent creation with the CSRF exemption, so this endpoint will ignore CSRF
+and could be used in mobile app
+"""
+@csrf_exempt # Exempt CSRF because Flutter POST won’t send CSRF token
+def create_payment_intent(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=400)
+
+    data = json.loads(request.body)
+    amount = data.get("amount")
+
+    try:
+        intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency="gbp",
+        )
+        return JsonResponse({"clientSecret": intent.client_secret})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
 """
 Endpoint for checkout session
 """

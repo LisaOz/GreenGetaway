@@ -40,15 +40,35 @@ class Trip(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)  # Price per person
 
+    sustainability_score = models.IntegerField(
+        default=5,
+        help_text="Overall sustainability rating: 1 (low) to 5 (high)"
+    )
+
     class Meta:
         verbose_name = "Trip"
         verbose_name_plural = "Trips"
 
+    """
+    Helper class to print stars displaying sustainability of the trips
+    """
+
+    def star_rating(self):
+        return "★" * self.sustainability_score + "☆" * (5 - self.sustainability_score)
+
+
+    """
+    Helper class to display price for the trip    
+    """
     def price_display(self):
         if self.price is not None:
             return f"£{self.price:.2f}"
         return "Free"
     price_display.short_description = "Price"
+
+    """
+    Helper class to display distance in km
+    """
 
     def distance_display(self):
         return f"{self.distance} km"
