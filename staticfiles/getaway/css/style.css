@@ -155,3 +155,10 @@ footer {
     z-index: 1;
     text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
+
+.trip-card > .sustainability-box {
+    color: green !important;      /* stars green */
+    font-size: 14px !important;   /* readable size */
+    line-height: 1.2 !important;
+    margin-top: 4px;
+}

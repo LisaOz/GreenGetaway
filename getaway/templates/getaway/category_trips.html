@@ -4,67 +4,68 @@
 {% block content %}
 <section class="category-section">
 
-<div class="category-trips-wrap">
-    <h2 class="category-title">{{ category.name }}</h2>
-</div>
-
-  <div class="category-content">
-
-    <!-- ===== LEFT SIDE: TRIP CARDS ===== -->
-    <div class="trips-left">
-      <div class="trips-grid">
-        {% for trip in trips %}
-          <a href="{% url 'getaway:trip_detail' trip.slug %}" class="trip-card">
-            <img src="{{ trip.main_image.url }}" alt="{{ trip.title }}">
-            <div class="trip-card-title">{{ trip.title }}</div>
-          </a>
-        {% empty %}
-          <p>No trips available in this category yet.</p>
-        {% endfor %}
-      </div>
+    <div class="category-trips-wrap">
+        <h2 class="category-title">{{ category.name }}</h2>
     </div>
 
-    <!-- ===== RIGHT SIDE: TRIP LIST ===== -->
-    <div class="trips-right">
-      <h2 class="side-title">Trip List</h2>
-      <ul class="trip-list">
-        {% for trip in trips %}
-          {% with next_event=trip.events.first %}
-          <li class="trip-item
-              {% if next_event %}
-                {% if next_event.status == 'upcoming' %}upcoming
-                {% elif next_event.status == 'passed' %}passed
-                {% elif next_event.status == 'cancelled' %}cancelled
-                {% endif %}
-              {% endif %}
-            ">
-            <a href="{% url 'getaway:trip_detail' trip.slug %}" class="trip-list-link">{{ trip.title }}</a>
-            {% if next_event %}
-              <span class="status
-                {% if next_event.status == 'upcoming' %}upcoming-pill
-                {% elif next_event.status == 'passed' %}passed-pill
-                {% elif next_event.status == 'cancelled' %}cancelled-pill
-                {% endif %}
-              ">
-                {{ next_event.status|capfirst }}
-              </span>
-            {% endif %}
-          </li>
-          {% endwith %}
-        {% empty %}
-          <p>No trips found in this category.</p>
-        {% endfor %}
-      </ul>
+    <div class="category-content">
+
+        <!-- ===== LEFT SIDE: TRIP CARDS ===== -->
+        <div class="trips-left">
+            <div class="trips-grid">
+                {% for trip in trips %}
+                    <a href="{% url 'getaway:trip_detail' trip.slug %}" class="trip-card">
+                        <img src="{{ trip.main_image.url }}" alt="{{ trip.title }}">
+                        <div class="trip-card-title">{{ trip.title }}
+                            <p class="sustainability-box" style="color: #66bb6a !important; font-size: 18px !important; line-height: 1.2 !important;">
+                                <br>Sustainability Rating<br>★★★★★ (5/5)
+                            </p>
+                        </div>
+                    </a>
+                {% empty %}
+                    <p>No trips available in this category yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ===== RIGHT SIDE: TRIP LIST ===== -->
+        <div class="trips-right">
+            <h2 class="side-title">Trip List</h2>
+            <ul class="trip-list">
+                {% for trip in trips %}
+                    {% with next_event=trip.events.first %}
+                        <li class="trip-item
+                            {% if next_event %}
+                                {% if next_event.status == 'upcoming' %}upcoming
+                                {% elif next_event.status == 'passed' %}passed
+                                {% elif next_event.status == 'cancelled' %}cancelled
+                                {% endif %}
+                            {% endif %}">
+                            <a href="{% url 'getaway:trip_detail' trip.slug %}" class="trip-list-link">{{ trip.title }}</a>
+
+                            {% if next_event %}
+                                <span class="status
+                                    {% if next_event.status == 'upcoming' %}upcoming-pill
+                                    {% elif next_event.status == 'passed' %}passed-pill
+                                    {% elif next_event.status == 'cancelled' %}cancelled-pill
+                                    {% endif %}">
+                                    {{ next_event.status|capfirst }}
+                                </span>
+                            {% endif %}
+                        </li>
+                    {% endwith %}
+                {% empty %}
+                    <p>No trips found in this category.</p>
+                {% endfor %}
+            </ul>
+        </div>
+
     </div>
 
-  </div>
+    <!-- ===== BACK BUTTON ===== -->
+    <div class="back-btn-container">
+        <a href="{% url 'getaway:home' %}" class="back-btn">← Back</a>
+    </div>
 
-  <!-- ===== BACK BUTTON ===== -->
-  <div class="back-btn-container">
-    <a href="{% url 'getaway:home' %}" class="back-btn">← Back</a>
-  </div>
-
-</div>
 </section>
-
 {% endblock %}
