@@ -16,7 +16,7 @@
         <ul>
           {% for field, errors in form.errors.items %}
             {% for error in errors %}
-            <p>Not enough available places for this trip event. Only {{ available_places }} left.</p>
+
               </strong> {{ error }}
             {% endfor %}
           {% endfor %}

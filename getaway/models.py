@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
@@ -146,10 +147,23 @@ class Booking(models.Model):
     paid = models.BooleanField(default=False)
 
     def clean(self):
-        # Validate that the number of people does not exceed available places.
-        if self.num_people > self.trip.available_places:
-            from django.core.exceptions import ValidationError
-            raise ValidationError(f"Not enough available places for this trip event. Only {self.trip.available_places} left.")
+        # Prevent booking past events
+        event_datetime = datetime.combine(self.trip.date, self.trip.time)
+
+        if timezone.is_naive(event_datetime):
+            event_datetime = timezone.make_aware(event_datetime)
+
+        # Prevent booking the past event
+        if event_datetime < timezone.now():
+            raise ValidationError(
+                f"This event that has already passed."
+            )
+
+        # Prevent overbooking
+        elif self.num_people > self.trip.available_places:
+            raise ValidationError(
+                f"Not enough available places."
+            )
 
     def save(self, *args, **kwargs):
         # Call clean() before saving to enforce validation.
