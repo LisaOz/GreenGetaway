@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
@@ -141,10 +142,16 @@ class Booking(models.Model):
     trip = models.ForeignKey(TripEvent, on_delete=models.CASCADE, related_name='bookings')
     name = models.CharField(max_length=100)
     email = models.EmailField()
-    num_people = models.PositiveIntegerField(default=1)
+
+    num_people = models.PositiveIntegerField(
+        default=1,
+        validators=[MinValueValidator(1)]
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     paid = models.BooleanField(default=False)
+
 
     def clean(self):
         # Prevent booking past events

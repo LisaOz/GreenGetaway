@@ -5,6 +5,7 @@ from django import forms
 from .models import TripEvent, Booking
 
 
+
 """
 Form for registering a trip event with date and time in the admin site
 """
@@ -41,4 +42,10 @@ class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = ['trip', 'name', 'email', 'num_people']
+        widgets = {
+            'num_people': forms.NumberInput(attrs={
+                'min': 1,
+                'value': 1
+            })
+        }
 
