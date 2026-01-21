@@ -28,37 +28,46 @@
             </div>
         </div>
 
-        <!-- ===== RIGHT SIDE: TRIP LIST ===== -->
-        <div class="trips-right">
-            <h2 class="side-title">Trip List</h2>
-            <ul class="trip-list">
-                {% for trip in trips %}
-                    {% with next_event=trip.events.first %}
-                        <li class="trip-item
-                            {% if next_event %}
-                                {% if next_event.status == 'upcoming' %}upcoming
-                                {% elif next_event.status == 'passed' %}passed
-                                {% elif next_event.status == 'cancelled' %}cancelled
-                                {% endif %}
-                            {% endif %}">
-                            <a href="{% url 'getaway:trip_detail' trip.slug %}" class="trip-list-link">{{ trip.title }}</a>
-
-                            {% if next_event %}
-                                <span class="status
-                                    {% if next_event.status == 'upcoming' %}upcoming-pill
-                                    {% elif next_event.status == 'passed' %}passed-pill
-                                    {% elif next_event.status == 'cancelled' %}cancelled-pill
-                                    {% endif %}">
-                                    {{ next_event.status|capfirst }}
-                                </span>
-                            {% endif %}
-                        </li>
-                    {% endwith %}
-                {% empty %}
-                    <p>No trips found in this category.</p>
+        <!-- -===== Right Side===== -->
+      <div class="trips-right">
+    <h2 class="side-title">Upcoming Trips</h2>
+    <ul class="trip-list">
+        {% for trip in trips %}
+            {# Initialize next_event as None #}
+            {% with next_event=None %}
+                {# Loop through all events sorted by date #}
+                {% for event in trip.events.all|dictsort:"date" %}
+                    {% if event.status == 'upcoming' and not next_event %}
+                        {% with next_event=event %}{% endwith %}
+                    {% endif %}
+                    {% if forloop.last and not next_event %}
+                        {% with next_event=event %}{% endwith %}
+                    {% endif %}
                 {% endfor %}
-            </ul>
-        </div>
+
+                <li class="trip-item
+                    {% if next_event.status == 'upcoming' %}upcoming
+                    {% elif next_event.status == 'passed' %}passed-muted
+                    {% elif next_event.status == 'cancelled' %}cancelled
+                    {% endif %}">
+                    <a href="{% url 'getaway:trip_detail' trip.slug %}" class="trip-list-link">
+                        {{ trip.title }}
+                    </a>
+
+                    <span class="status
+                        {% if next_event.status == 'upcoming' %}upcoming-pill
+                        {% elif next_event.status == 'passed' %}passed-pill
+                        {% elif next_event.status == 'cancelled' %}cancelled-pill
+                        {% endif %}">
+                        {{ next_event.status|capfirst }}
+                    </span>
+                </li>
+            {% endwith %}
+        {% empty %}
+            <p>No trips found in this category.</p>
+        {% endfor %}
+    </ul>
+</div>
 
     </div>
 
