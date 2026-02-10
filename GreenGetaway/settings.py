@@ -24,9 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',     # localhost in browser
-    'localhost',
-    '10.0.2.2',      # Android emulator
+    '*'
+   # '127.0.0.1',     # localhost in browser
+   # 'localhost',
+    #'10.0.2.2',      # Android emulator
+    #'192.168.1.77',   # Ubuntu VM (attacker), added for testing
 ]
 
 
@@ -94,8 +96,6 @@ WSGI_APPLICATION = 'GreenGetaway.wsgi.application'
 
 
 # For development: print emails to the console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -175,5 +175,25 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+
 }
+
+# Logging to ensure all rejected hosts are printed
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
+
 
