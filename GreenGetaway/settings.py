@@ -93,6 +93,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'GreenGetaway.wsgi.application'
 
 
@@ -187,12 +189,25 @@ LOGGING = {
         "console": {
             "class": "logging.StreamHandler",
         },
+
+        # Create a file for logging of user input and AI responses,
+        "ai_file": {
+            "class": "logging.FileHandler",
+            "filename": "ai_security.log",
+            "level": "INFO",
+
+        },
     },
     "loggers": {
         "django.request": {
             "handlers": ["console"],
             "level": "DEBUG",
             "propagate": True,
+        },
+        "ai_security": { # custom logger
+            "handlers": ["console", "ai_file"],
+            "level": "INFO",
+            "propagate": False,
         },
     },
 }
