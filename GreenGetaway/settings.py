@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     'getaway', # app trips
     'accounts', # app accounts
     'payment', # app payment
-     'rest_framework_simplejwt',
+    'rest_framework_simplejwt',
     'api',
+    'ai_assistant', # app for Ollama
 
 ]
 

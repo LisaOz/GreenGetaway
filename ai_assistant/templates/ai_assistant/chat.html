@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GreenGetaway AI Assistant</title>
+</head>
+<body>
+    <h1>AI Travel Assistant</h1>
+
+    <form method="post">
+    {% csrf_token %}
+    <textarea name = "prompt" rows = "4" cols="60" placeholder="Ask about trips..."></textarea>
+    <br><br>
+    <button type="submit">Ask AI</button>
+    </form>
+
+{% if response %}
+    <h2>AI Response:</h2>
+    <p>{{ response }}</p>
+{% endif %}
+
+</body>
+</html>
