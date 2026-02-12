@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .ollama_service import ask_ai
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from getaway.models import Booking
 import logging
 
 # Create your views here.

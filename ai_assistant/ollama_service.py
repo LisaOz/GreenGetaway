@@ -1,28 +1,33 @@
 import requests
+from getaway.models import Trip
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 def ask_ai(user_prompt):
 
-    system_prompt = """
-You are an AI assistant for the GreenGetaway travel platform.
 
-GreenGetaway only offers:
-- City Strolls (short guided urban tours in London)
-- Nature Retreats (short daytime nature trips)
+    # Fetch the trips from the database
+    trips = Trip.objects.all()[:5] # limit the trips number to 5
 
-The platform does NOT offer:
-- Hotel bookings
-- Accommodation packages
-- Flight tickets
-- Camping reservations
-- External activities
-- Trips outside the UK
-- City strolls outside London
+    if not trips:
+        trip_context = "No trips currently available."
+    else:
+        trip_context = "\n".join([
+            f"{trip.title} | {trip.category.name} | {trip.level} | £{trip.price}"
+            for trip in trips
+        ])
 
-You must ONLY recommend city strolls and nature retreats available on the GreenGetaway platform.
 
-If a user asks for something outside the platform services,
-politely explain that GreenGetaway only provides London city strolls and nature retreats.
+    # System prompt
+    system_prompt = f"""
+You are an AI assistant for GreenGetaway.
+
+Available Trips:
+{trip_context}
+
+Only recommend trips listed above.
+Do not invent new services.
+
+Do NOT invent trips that are not listed above.
 """
 
     full_prompt = f"{system_prompt}\n\nUser: {user_prompt}\nAssistant:"
@@ -39,6 +44,6 @@ politely explain that GreenGetaway only provides London city strolls and nature 
         )
         response.raise_for_status()
 
-        return response.json().get("response", "No response from model.")
+        return response.json().get("response", "No response.")
     except requests.exceptions.RequestException as e:
         return f"AI communication error: {str(e)}"
